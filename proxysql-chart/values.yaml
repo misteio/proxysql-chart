@@ -1,0 +1,114 @@
+# Default values for proxysql-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: severalnines/proxysql
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "2.0.13"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 6037
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+mysql:
+  readers:
+  - endpoint: db1_reader_endpoint
+    port: 3306
+    max_connections: 100
+  writer:
+    endpoint: db_writer_endpoint
+    port: 3306
+    max_connections: 100
+  username: username
+  password : password
+
+proxysql:
+  check_type: read_only #for AWS Aurora: innodb_read_only
+  threads: 4
+  max_connections: 2048
+  default_query_delay: 0
+  default_query_timeout: 36000000
+  have_compress: true
+  poll_timeout: 2000
+  interfaces: "0.0.0.0:6033;/tmp/proxysql.sock"
+  default_schema: "information_schema"
+  stacksize: 1048576
+  server_version: "5.1.30"
+  connect_timeout_server: 10000
+  monitor_history: 60000
+  monitor_connect_interval: 200000
+  monitor_ping_interval: 200000
+  ping_interval_server_msec: 10000
+  ping_timeout_server: 200
+  commands_stats: true
+  sessions_sort: true
+  monitor_username: username
+  monitor_password: password

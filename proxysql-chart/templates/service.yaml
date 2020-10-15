@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "proxysql-chart.fullname" . }}
+  labels:
+    {{- include "proxysql-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: proxysql-mysql
+      protocol: TCP
+      name: proxysql-mysql
+  selector:
+    {{- include "proxysql-chart.selectorLabels" . | nindent 4 }}

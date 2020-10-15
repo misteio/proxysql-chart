@@ -13,10 +13,15 @@ This chart bootstraps a proxysql deployment on a [Kubernetes](http://kubernetes.
   - Helm 3.+
 
 ## Installation
+Add repository : 
+```console
+helm repo add ermeo https://chart.ermeo.io
+```
+
 To install the chart with the release name `proxysql`:
 
 ```console
-$ helm install proxysql proxysql-chart
+$ helm install proxysql ermeo/proxysql-chart
 ```
 
 ## Uninstalling the Chart
